@@ -22,6 +22,7 @@ uses
   System.SysUtils;
 
 const
+  _PU = '';
   {$IF Defined(MSWINDOWS)}
     {$IFDEF WIN64}
       link_libmpg123 = 'libmpg123-0.dll';
@@ -29,7 +30,6 @@ const
     {$IFDEF WIN32}
       link_libmpg123 = 'libmpg123-0.dll';
     {$ENDIF}
-    _PU = '';
   {$ELSEIF Defined(MACOS)}
     link_libmpg123 = '@executable_path/../Frameworks/libmpg123-0.dylib';
     _PU = '_';
@@ -148,7 +148,7 @@ type
  *  \return string describing what that error error code means
  *)
 function mpg123_plain_strerror(errcode: integer): MarshaledAString;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_plain_strerror' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_plain_strerror';
 
 (** Give string describing what error has occured in the context of handle mh.
  *  When a function operating on an mpg123 handle returns MPG123_ERR, you should check for the actual reason via
@@ -158,14 +158,14 @@ function mpg123_plain_strerror(errcode: integer): MarshaledAString;
  *  \return error message
  *)
 function mpg123_strerror(mh: pMpg123_handle): MarshaledAString;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_strerror' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_strerror';
 
 (** Return the plain errcode intead of a string.
  *  \param mh handle
  *  \return error code recorded in handle or MPG123_BAD_HANDLE
  *)
 function mpg123_errcode(mh: pMpg123_handle): integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_errcode' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_errcode';
 
 
 (** Function to initialise the mpg123 library.
@@ -174,12 +174,12 @@ function mpg123_errcode(mh: pMpg123_handle): integer;
  *	\return MPG123_OK if successful, otherwise an error number.
  *)
 function mpg123_init(): integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_init' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_init';
 
 (** Function to close down the mpg123 library.
  *	This function is not thread-safe. Call it exactly once per process, before any other (possibly threaded) work with the library. *)
 procedure mpg123_exit();
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_exit' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_exit';
 
 (** Create a handle with optional choice of decoder (named by a string, see mpg123_decoders() or mpg123_supported_decoders()).
  *  and optional retrieval of an error code to feed to mpg123_plain_strerror().
@@ -190,13 +190,13 @@ procedure mpg123_exit();
  *  \return Non-NULL pointer to fresh handle when successful.
  *)
 function mpg123_new(const decoder: MarshaledAString; var error: integer): pMpg123_handle;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_new' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_new';
 
 (** Delete handle, mh is either a valid mpg123 handle or NULL.
  *  \param mh handle
  *)
 procedure mpg123_delete(mh: pMpg123_handle);
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_delete' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_delete';
 
 type
   (** Enumeration of the parameters types that it is possible to set/get. *)
@@ -269,7 +269,7 @@ type
  *  \return MPG123_OK on success
  *)
 function mpg123_param(mh: pMpg123_handle; _type: TMpg123_parms; value: LongInt; fvalue: double): integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_param' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_param';
 
 (** Get a specific parameter, for a specific mpg123_handle.
  *  See the mpg123_parms enumeration for a list of available parameters.
@@ -280,7 +280,7 @@ function mpg123_param(mh: pMpg123_handle; _type: TMpg123_parms; value: LongInt; 
  *  \return MPG123_OK on success
  *)
 function mpg123_getparam(mh: pMpg123_handle; _type: TMpg123_parms; var value: LongInt; var fvalue: Double): integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_getparam' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_getparam';
 
 type
   (** Feature set available for query with mpg123_feature. *)
@@ -307,7 +307,7 @@ type
  *  \return 1 for success, 0 for unimplemented functions
  *)
 function mpg123_feature(const key: TMpg123_feature_set): integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_feature' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_feature';
 (* @} *)
 
 
@@ -323,13 +323,13 @@ function mpg123_feature(const key: TMpg123_feature_set): integer;
  *  \return NULL-terminated array of generally available decoder names (plain 8bit ASCII)
  *)
 function mpg123_decoders(): PMarshaledAString;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_decoders' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_decoders';
 
 (** Get supported decoder list.
  *  \return NULL-terminated array of the decoders supported by the CPU (plain 8bit ASCII)
  *)
 function mpg123_supported_decoders(): PMarshaledAString;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_supported_decoders' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_supported_decoders';
 
 (** Set the active decoder.
  *  \param mh handle
@@ -337,7 +337,7 @@ function mpg123_supported_decoders(): PMarshaledAString;
  *  \return MPG123_OK on success
  *)
 function mpg123_decoder(mh: pMpg123_handle; decoder_name: MarshaledAString): integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_decoder' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_decoder';
 
 (** Get the currently active decoder name.
  *  The active decoder engine can vary depening on output constraints,
@@ -349,7 +349,7 @@ function mpg123_decoder(mh: pMpg123_handle; decoder_name: MarshaledAString): int
  *  \return The decoder name or NULL on error.
  *)
 function mpg123_current_decoder(mh: pMpg123_handle): MarshaledAString;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_current_decoder' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_current_decoder';
 
 (*@}*)
 
@@ -385,20 +385,20 @@ function mpg123_current_decoder(mh: pMpg123_handle): MarshaledAString;
  *  \param list Store a pointer to the sample rates array there.
  *  \param number Store the number of sample rates there. *)
 procedure mpg123_rates(const list: PLongInt; var number: Integer);
-  cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_rates' {$ENDIF};
+  cdecl; external link_libmpg123 name _PU + 'mpg123_rates';
 
 (** An array of supported audio encodings.
  *  An audio encoding is one of the fully qualified members of mpg123_enc_enum (MPG123_ENC_SIGNED_16, not MPG123_SIGNED).
  *  \param list Store a pointer to the encodings array there.
  *  \param number Store the number of encodings there. *)
 procedure mpg123_encodings(const list: PInteger; var number: Integer);
-  cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_encodings' {$ENDIF};
+  cdecl; external link_libmpg123 name _PU + 'mpg123_encodings';
 
 (** Return the size (in bytes) of one mono sample of the named encoding.
  * \param encoding The encoding value to analyze.
  * \return positive size of encoding in bytes, 0 on invalid encoding. *)
 function mpg123_encsize(encoding: integer): integer;
-  cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_encsize' {$ENDIF};
+  cdecl; external link_libmpg123 name _PU + 'mpg123_encsize';
 
 (** Configure a mpg123 handle to accept no output format at all,
  *  use before specifying supported formats with mpg123_format
@@ -406,7 +406,7 @@ function mpg123_encsize(encoding: integer): integer;
  *  \return MPG123_OK on success
  *)
 function mpg123_format_none(mh: pMpg123_handle): integer;
-  cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_format_none' {$ENDIF};
+  cdecl; external link_libmpg123 name _PU + 'mpg123_format_none';
 
 (** Configure mpg123 handle to accept all formats
  *  (also any custom rate you may set) -- this is default.
@@ -414,7 +414,7 @@ function mpg123_format_none(mh: pMpg123_handle): integer;
  *  \return MPG123_OK on success
  *)
 function mpg123_format_all(mh: pMpg123_handle): integer;
-  cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_format_all' {$ENDIF};
+  cdecl; external link_libmpg123 name _PU + 'mpg123_format_all';
 
 (** Set the audio format support of a mpg123_handle in detail:
  *  \param mh handle
@@ -423,7 +423,7 @@ function mpg123_format_all(mh: pMpg123_handle): integer;
  *  \param encodings A combination of accepted encodings for rate and channels, p.ex MPG123_ENC_SIGNED16 | MPG123_ENC_ULAW_8 (or 0 for no support). Please note that some encodings may not be supported in the library build and thus will be ignored here.
  *  \return MPG123_OK on success, MPG123_ERR if there was an error. *)
 function mpg123_format(mh: pMpg123_handle; rate: LongInt; channels: integer; encodings: integer): integer;
-  cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_format' {$ENDIF};
+  cdecl; external link_libmpg123 name _PU + 'mpg123_format';
 
 (** Check to see if a specific format at a specific rate is supported
  *  by mpg123_handle.
@@ -433,7 +433,7 @@ function mpg123_format(mh: pMpg123_handle; rate: LongInt; channels: integer; enc
  *  \return 0 for no support (that includes invalid parameters), MPG123_STEREO,
  *          MPG123_MONO or MPG123_STEREO|MPG123_MONO. *)
 function mpg123_format_support(mh: pMpg123_handle; rate: LongInt; encoding: integer): integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_format_support' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_format_support';
 
 (** Get the current output format written to the addresses given.
  *  If the stream is freshly loaded, this will try to parse enough
@@ -447,7 +447,7 @@ function mpg123_format_support(mh: pMpg123_handle; rate: LongInt; encoding: inte
  *  \return MPG123_OK on success
  *)
 function mpg123_getformat(mh: pMpg123_handle; var rate: LongInt; var channels: integer; var encodings: integer): integer;
-  cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_getformat' {$ENDIF};
+  cdecl; external link_libmpg123 name _PU + 'mpg123_getformat';
 
 (** Get the current output format written to the addresses given.
  *  This differs from plain mpg123_getformat() in that you can choose
@@ -461,7 +461,7 @@ function mpg123_getformat(mh: pMpg123_handle; var rate: LongInt; var channels: i
  *  \return MPG123_OK on success
  *)
 function mpg123_getformat2(mh: pMpg123_handle; var rate: LongInt; var channels: integer; var encodings: integer; clear_flag: integer): integer;
-  cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_getformat2' {$ENDIF};
+  cdecl; external link_libmpg123 name _PU + 'mpg123_getformat2';
 
 (*@}*)
 
@@ -484,7 +484,7 @@ function mpg123_getformat2(mh: pMpg123_handle; var rate: LongInt; var channels: 
  *  \return MPG123_OK on success
  *)
 function mpg123_open(mh: pMpg123_handle; const path: MarshaledAString): integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_open' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_open';
 
 (** Use an already opened file descriptor as the bitstream input
  *  mpg123_close() will _not_ close the file descriptor.
@@ -493,7 +493,7 @@ function mpg123_open(mh: pMpg123_handle; const path: MarshaledAString): integer;
  *  \return MPG123_OK on success
  *)
 function mpg123_open_fd(mh: pMpg123_handle; fd: integer): integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_open_fd' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_open_fd';
 
 (** Use an opaque handle as bitstream input. This works only with the
  *  replaced I/O from mpg123_replace_reader_handle()!
@@ -503,7 +503,7 @@ function mpg123_open_fd(mh: pMpg123_handle; fd: integer): integer;
  *  \return MPG123_OK on success
  *)
 function mpg123_open_handle(mh: pMpg123_handle; iohandle: Pointer): integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_open_handle' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_open_handle';
 
 (** Open a new bitstream and prepare for direct feeding
  *  This works together with mpg123_decode(); you are responsible for reading and feeding the input bitstream.
@@ -511,14 +511,14 @@ function mpg123_open_handle(mh: pMpg123_handle; iohandle: Pointer): integer;
  *  \return MPG123_OK on success
  *)
 function mpg123_open_feed(mh: pMpg123_handle): integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_open_feed' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_open_feed';
 
 (** Closes the source, if libmpg123 opened it.
  *  \param mh handle
  *  \return MPG123_OK on success
  *)
 function mpg123_close(mh: pMpg123_handle): integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_close' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_close';
 
 (** Read from stream and decode up to outmemsize bytes.
  *  \param mh handle
@@ -528,7 +528,7 @@ function mpg123_close(mh: pMpg123_handle): integer;
  *  \return MPG123_OK or error/message code
  *)
 function mpg123_read(mh: pMpg123_handle; outmemory: PByte; outmemsize: Longint; done: PCardinal): Integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_read' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_read';
 
 (** Feed data for a stream that has been opened with mpg123_open_feed().
  *  It's give and take: You provide the bytestream, mpg123 gives you the decoded samples.
@@ -538,7 +538,7 @@ function mpg123_read(mh: pMpg123_handle; outmemory: PByte; outmemsize: Longint; 
  *  \return MPG123_OK or error/message code.
  *)
 function mpg123_feed(mh: pMpg123_handle; const _in: PByte; size: Cardinal): Integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_feed' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_feed';
 
 (** Decode MPEG Audio from inmemory to outmemory.
  *  This is very close to a drop-in replacement for old mpglib.
@@ -556,7 +556,7 @@ function mpg123_feed(mh: pMpg123_handle; const _in: PByte; size: Cardinal): Inte
  *  \return error/message code (watch out especially for MPG123_NEED_MORE)
  *)
 function mpg123_decode(mh: pMpg123_handle; const inmemory: PByte; inmemsize: Cardinal; outmemory: PByte; outmemsize: Cardinal; var done: Cardinal): Integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_decode' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_decode';
 
 (** Decode next MPEG frame to internal buffer
  *  or read a frame and return after setting a new format.
@@ -567,7 +567,7 @@ function mpg123_decode(mh: pMpg123_handle; const inmemory: PByte; inmemsize: Car
  *  \return MPG123_OK or error/message code
  *)
 function mpg123_decode_frame(mh: pMpg123_handle; var num: Longint; var audio: PByte; var bytes: Cardinal): Integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_decode_frame' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_decode_frame';
 
 (** Decode current MPEG frame to internal buffer.
  * Warning: This is experimental API that might change in future releases!
@@ -579,7 +579,7 @@ function mpg123_decode_frame(mh: pMpg123_handle; var num: Longint; var audio: PB
  *  \return MPG123_OK or error/message code
  *)
 function mpg123_framebyframe_decode(mh: pMpg123_handle; var num: Longint; var audio: PByte; var bytes: Cardinal): Integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_framebyframe_decode' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_framebyframe_decode';
 
 (** Find, read and parse the next mp3 frame
  * Warning: This is experimental API that might change in future releases!
@@ -588,7 +588,7 @@ function mpg123_framebyframe_decode(mh: pMpg123_handle; var num: Longint; var au
  *  \return MPG123_OK or error/message code
  *)
 function mpg123_framebyframe_next(mh: pMpg123_handle): Integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_framebyframe_next' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_framebyframe_next';
 
 (** Get access to the raw input data for the last parsed frame.
  * This gives you a direct look (and write access) to the frame body data.
@@ -606,7 +606,7 @@ function mpg123_framebyframe_next(mh: pMpg123_handle): Integer;
  *    this function).
  *)
 function mpg123_framedata(mh: pMpg123_handle; header: PLongWord; var bodydata: PByte; bodybytes: PCardinal): Integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_framedata' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_framedata';
 
 (** Get the input position (byte offset in stream) of the last parsed frame.
  *  This can be used for external seek index building, for example.
@@ -616,7 +616,7 @@ function mpg123_framedata(mh: pMpg123_handle; header: PLongWord; var bodydata: P
  * \return byte offset in stream
  *)
 function mpg123_framepos(mh: pMpg123_handle): Longint
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_framepos' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_framepos';
 
 (*@}*)
 
@@ -647,21 +647,21 @@ function mpg123_framepos(mh: pMpg123_handle): Longint
  *  \return sample offset or MPG123_ERR (null handle)
  *)
 function mpg123_tell(mh: pMpg123_handle): Longint;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_tell' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_tell';
 
 (** Returns the frame number that the next read will give you data from.
  *  \param mh handle
  *  \return frame offset or MPG123_ERR (null handle)
  *)
 function mpg123_tellframe(mh: pMpg123_handle): Longint;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_tellframe' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_tellframe';
 
 (** Returns the current byte offset in the input stream.
  *  \param mh handle
  *  \return byte offset or MPG123_ERR (null handle)
  *)
 function mpg123_tell_stream(mh: pMpg123_handle): Longint;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_tell_stream' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_tell_stream';
 
 (** Seek to a desired sample offset.
  *  Usage is modelled afer the standard lseek().
@@ -671,7 +671,7 @@ function mpg123_tell_stream(mh: pMpg123_handle): Longint;
  * \return The resulting offset >= 0 or error/message code
  *)
 function mpg123_seek(mh: pMpg123_handle; sampleoff: Longint; whence: integer): Longint;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_seek' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_seek';
 
 (** Seek to a desired sample offset in data feeding mode.
  *  This just prepares things to be right only if you ensure that the next chunk of input data will be from input_offset byte position.
@@ -682,7 +682,7 @@ function mpg123_seek(mh: pMpg123_handle; sampleoff: Longint; whence: integer): L
  *                      next time data is fed to mpg123_decode().
  *  \return The resulting offset >= 0 or error/message code *)
 function mpg123_feedseek(mh: pMpg123_handle; sampleoff: Longint; whence: integer; input_offset: PLongint): Longint;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_feedseek' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_feedseek';
 
 (** Seek to a desired MPEG frame offset.
  *  Usage is modelled afer the standard lseek().
@@ -691,13 +691,13 @@ function mpg123_feedseek(mh: pMpg123_handle; sampleoff: Longint; whence: integer
  * \param whence one of SEEK_SET, SEEK_CUR or SEEK_END
  * \return The resulting offset >= 0 or error/message code *)
 function mpg123_seek_frame(mh: pMpg123_handle; frameoff: Longint; whence: Integer): Longint;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_seek_frame' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_seek_frame';
 
 (** Return a MPEG frame offset corresponding to an offset in seconds.
  *  This assumes that the samples per frame do not change in the file/stream, which is a good assumption for any sane file/stream only.
  *  \return frame offset >= 0 or error/message code *)
 function mpg123_timeframe(mh: pMpg123_handle; sec: double): Longint;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_timeframe' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_timeframe';
 
 (** Give access to the frame index table that is managed for seeking.
  *  You are asked not to modify the values... Use mpg123_set_index to set the
@@ -709,7 +709,7 @@ function mpg123_timeframe(mh: pMpg123_handle; sec: double): Longint;
  *  \return MPG123_OK on success
  *)
 function mpg123_index(mh: pMpg123_handle; var offsets: PLongint; step: PLongint; fill: PCardinal): Integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_index' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_index';
 
 (** Set the frame index table
  *  Setting offsets to NULL and fill > 0 will allocate fill entries. Setting offsets
@@ -721,7 +721,7 @@ function mpg123_index(mh: pMpg123_handle; var offsets: PLongint; step: PLongint;
  *  \return MPG123_OK on success
  *)
 function mpg123_set_index(mh: pMpg123_handle; offsets: PLongint; step: Longint; fill: Cardinal): Integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_set_index' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_set_index';
 
 (** An old crutch to keep old mpg123 binaries happy.
  *  WARNING: This function is there only to avoid runtime linking errors with
@@ -731,7 +731,7 @@ function mpg123_set_index(mh: pMpg123_handle; offsets: PLongint; step: Longint; 
  *  be purged from the library.
  *)
 function mpg123_position(mh: pMpg123_handle; frame_offset: Longint; buffered_bytes: Longint; current_frame: PLongint; frames_left: PLongint; current_seconds: PDouble; seconds_left: PDouble): Integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_position' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_position';
 
 (*@}*)
 
@@ -758,7 +758,7 @@ type
  *  \return MPG123_OK on success
  *)
 function mpg123_eq( mh: pMpg123_handle; channel: TMpg123_channels; band: integer; val: double): Integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_eq' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_eq';
 
 (** Get the 32 Band Audio Equalizer settings.
  *  \param mh handle
@@ -766,14 +766,14 @@ function mpg123_eq( mh: pMpg123_handle; channel: TMpg123_channels; band: integer
  *  \param band The equaliser band to change (from 0 to 31)
  *  \return The (linear) adjustment factor (zero for pad parameters) *)
 function mpg123_geteq(mh: pMpg123_handle; channel: TMpg123_channels; band: integer; val: Integer): Double;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_geteq' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_geteq';
 
 (** Reset the 32 Band Audio Equalizer settings to flat
  *  \param mh handle
  *  \return MPG123_OK on success
  *)
 function mpg123_reset_eq(mh: pMpg123_handle): Integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_reset_eq' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_reset_eq';
 
 (** Set the absolute output volume including the RVA setting,
  *  vol<0 just applies (a possibly changed) RVA setting.
@@ -782,7 +782,7 @@ function mpg123_reset_eq(mh: pMpg123_handle): Integer;
  *  \return MPG123_OK on success
  *)
 function mpg123_volume(mh: pMpg123_handle; vol: double): Integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_volume' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_volume';
 
 (** Adjust output volume including the RVA setting by chosen amount
  *  \param mh handle
@@ -790,7 +790,7 @@ function mpg123_volume(mh: pMpg123_handle; vol: double): Integer;
  *  \return MPG123_OK on success
  *)
 function mpg123_volume_change(mh: pMpg123_handle; change: double): Integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_volume_change' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_volume_change';
 
 (** Return current volume setting, the actual value due to RVA, and the RVA
  *  adjustment itself. It's all as double float value to abstract the sample
@@ -803,7 +803,7 @@ function mpg123_volume_change(mh: pMpg123_handle; change: double): Integer;
  *  \return MPG123_OK on success
  *)
 function mpg123_getvolume(mh: pMpg123_handle; base: PDouble; really: PDouble; rva_db: PDouble): Integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_getvolume' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_getvolume';
 
 (* TODO: Set some preamp in addition / to replace internal RVA handling? *)
 
@@ -871,14 +871,14 @@ type
  *  \return MPG123_OK on success
  *)
 function mpg123_info(mh: pMpg123_handle; mi: pMpg123_frameinfo): Integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_info' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_info';
 
 (** Get the safe output buffer size for all cases
  *  (when you want to replace the internal buffer)
  *  \return safe buffer size
  *)
 function mpg123_safe_buffer(): Cardinal;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_safe_buffer' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_safe_buffer';
 
 (** Make a full parsing scan of each frame in the file. ID3 tags are found. An
  *  accurate length value is stored. Seek index will be filled. A seek back to
@@ -888,21 +888,21 @@ function mpg123_safe_buffer(): Cardinal;
  *  \return MPG123_OK on success
  *)
 function mpg123_scan(mh: pMpg123_handle): Integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_scan' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_scan';
 
 (** Return, if possible, the full (expected) length of current track in frames.
  * \param mh handle
  * \return length >= 0 or MPG123_ERR if there is no length guess possible.
  *)
 function mpg123_framelength(mh: pMpg123_handle): Longint;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_framelength' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_framelength';
 
 (** Return, if possible, the full (expected) length of current track in samples.
  * \param mh handle
  * \return length >= 0 or MPG123_ERR if there is no length guess possible.
  *)
 function mpg123_length(mh: pMpg123_handle): Longint;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_length' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_length';
 
 (** Override the value for file size in bytes.
  *  Useful for getting sensible track length values in feed mode or for HTTP streams.
@@ -911,28 +911,28 @@ function mpg123_length(mh: pMpg123_handle): Longint;
  *  \return MPG123_OK on success
  *)
 function mpg123_set_filesize(mh: pMpg123_handle; size: Cardinal): Integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_set_filesize' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_set_filesize';
 
 (** Get MPEG frame duration in seconds.
  *  \param mh handle
  *  \return frame duration in seconds, <0 on error
  *)
 function mpg123_tpf(mh: pMpg123_handle): Double;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_tpf' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_tpf';
 
 (** Get MPEG frame duration in samples.
  *  \param mh handle
  *  \return samples per frame for the most recently parsed frame; <0 on errors
  *)
 function mpg123_spf(mh: pMpg123_handle): Integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_spf' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_spf';
 
 (** Get and reset the clip count.
  *  \param mh handle
  *  \return count of clipped samples
  *)
 function mpg123_clip(mh: pMpg123_handle): Longint;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_clip' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_clip';
 
 type
   (** The key values for state information from mpg123_getstate(). *)
@@ -952,7 +952,7 @@ type
  *  \return MPG123_OK on success
  *)
 function mpg123_getstate(mh: pMpg123_handle; key: TMpg123_state; val: PLongInt; fval: PDouble): Integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_getstate' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_getstate';
 
 (*@}*)
 
@@ -979,13 +979,13 @@ type
  *  \param sb string handle (address of existing structure on your side)
  *)
 procedure mpg123_init_string(sb: pMpg123_string);
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_init_string' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_init_string';
 
 (** Free-up mempory for an existing mpg123_string
  *  \param sb string handle
  *)
 procedure mpg123_free_string(sb: pMpg123_string);
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_free_string' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_free_string';
 
 (** Change the size of a mpg123_string
  *  \param sb string handle
@@ -993,7 +993,7 @@ procedure mpg123_free_string(sb: pMpg123_string);
  *  \return 0 on error, 1 on success
  *)
 function mpg123_resize_string(sb: pMpg123_string; news: Cardinal): Integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_resize_string' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_resize_string';
 
 (** Increase size of a mpg123_string if necessary (it may stay larger).
  *  Note that the functions for adding and setting in current libmpg123
@@ -1005,7 +1005,7 @@ function mpg123_resize_string(sb: pMpg123_string; news: Cardinal): Integer;
  *  \return 0 on error, 1 on success
  *)
 function mpg123_grow_string(sb: pMpg123_string; news: Cardinal): Integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_grow_string' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_grow_string';
 
 (** Copy the contents of one mpg123_string string to another.
  *  Yes the order of arguments is reversed compated to memcpy().
@@ -1014,7 +1014,7 @@ function mpg123_grow_string(sb: pMpg123_string; news: Cardinal): Integer;
  *  \return 0 on error, 1 on success
  *)
 function mpg123_copy_string(from: pMpg123_string; _to: pMpg123_string): Integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_copy_string' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_copy_string';
 
 (** Append a C-String to an mpg123_string
  *  \param sb string handle
@@ -1022,7 +1022,7 @@ function mpg123_copy_string(from: pMpg123_string; _to: pMpg123_string): Integer;
  *  \return 0 on error, 1 on success
  *)
 function mpg123_add_string(sb: pMpg123_string; const stuff: MarshaledAString): Integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_add_string' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_add_string';
 
 (** Append a C-substring to an mpg123 string
  *  \param sb string handle
@@ -1032,7 +1032,7 @@ function mpg123_add_string(sb: pMpg123_string; const stuff: MarshaledAString): I
  *  \return 0 on error, 1 on success
  *)
 function mpg123_add_substring(sb: pMpg123_string; const stuff: MarshaledAString; from: Cardinal; count: Cardinal): Integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_add_substring' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_add_substring';
 
 (** Set the content of a mpg123_string to a C-string
  *  \param sb string handle
@@ -1040,7 +1040,7 @@ function mpg123_add_substring(sb: pMpg123_string; const stuff: MarshaledAString;
  *  \return 0 on error, 1 on success
  *)
 function mpg123_set_string(sb: pMpg123_string; const stuff: MarshaledAString): Integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_set_string' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_set_string';
 
 (** Set the content of a mpg123_string to a C-substring
  *  \param sb string handle
@@ -1050,7 +1050,7 @@ function mpg123_set_string(sb: pMpg123_string; const stuff: MarshaledAString): I
  *  \return 0 on error, 1 on success
  *)
 function mpg123_set_substring(sb: pMpg123_string; const stuff: MarshaledAString; from: Cardinal; count: Cardinal ): Integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_set_substring' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_set_substring';
 
 (** Count characters in a mpg123 string (non-null bytes or UTF-8 characters).
  *  Even with the fill property, the character count is not obvious as there could be multiple trailing null bytes.
@@ -1059,14 +1059,14 @@ function mpg123_set_substring(sb: pMpg123_string; const stuff: MarshaledAString;
  *  \return character count
 *)
 function mpg123_strlen(sb: pMpg123_string; utf8: Integer): Cardinal;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_strlen' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_strlen';
 
 (** Remove trailing \\r and \\n, if present.
  *  \param sb string handle
  *  \return 0 on error, 1 on success
  *)
 function mpg123_chomp_string(sb: pMpg123_string): Integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_chomp_string' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_chomp_string';
 
 type
   (** The mpg123 text encodings. This contains encodings we encounter in ID3 tags or ICY meta info. *)
@@ -1105,7 +1105,7 @@ type
  *)
 
 function mpg123_enc_from_id3(id3_enc_byte: Byte): TMpg123_text_encoding;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_enc_from_id3' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_enc_from_id3';
 
 (** Store text data in string, after converting to UTF-8 from indicated encoding
  *  A prominent error can be that you provided an unknown encoding value, or this build of libmpg123 lacks support for certain encodings (ID3 or ICY stuff missing).
@@ -1117,7 +1117,7 @@ function mpg123_enc_from_id3(id3_enc_byte: Byte): TMpg123_text_encoding;
  *  \return 0 on error, 1 on success (on error, mpg123_free_string is called on sb)
  *)
 function mpg123_store_utf8(sb: pMpg123_string; enc: TMpg123_text_encoding; const source: PByte; source_size: Cardinal): Integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_store_utf8' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_store_utf8';
 
 type
   (** Sub data structure for ID3v2, for storing various text fields (including comments).
@@ -1226,20 +1226,20 @@ const
  *  \return combination of flags, 0 on error (same as "nothing new")
  *)
 function mpg123_meta_check(mh: pMpg123_handle): Integer;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_meta_check' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_meta_check';
 
 (** Clean up meta data storage (ID3v2 and ICY), freeing memory.
  *  \param mh handle
  *)
 procedure mpg123_meta_free(mh: pMpg123_handle);
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_meta_free' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_meta_free';
 
 (** Point v1 and v2 to existing data structures wich may change on any next read/decode function call.
  *  v1 and/or v2 can be set to NULL when there is no corresponding data.
  *  \return MPG123_OK on success
  *)
 function mpg123_id3_1(mh: pMpg123_handle;	var v1: pMpg123_id3v1; var v2: pMpg123_id3v2): Integer;
- cdecl; external link_libmpg123 name 'mpg123_id3' {$IFDEF MACOS} name _PU + 'mpg123_id3' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_id3';
 
 (** Point icy_meta to existing data structure wich may change on any next read/decode function call.
  *  \param mh handle
@@ -1247,14 +1247,14 @@ function mpg123_id3_1(mh: pMpg123_handle;	var v1: pMpg123_id3v1; var v2: pMpg123
  *  \return MPG123_OK on success
  *)
 function mpg123_icy_1(mh: pMpg123_handle; var icy_meta: MarshaledAString): Integer;
- cdecl; external link_libmpg123 name 'mpg123_icy'{$IFDEF MACOS} name _PU + 'mpg123_icy' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_icy';
 
 (** Decode from windows-1252 (the encoding ICY metainfo used) to UTF-8.
  *  Note that this is very similar to mpg123_store_utf8(&sb, mpg123_text_icy, icy_text, strlen(icy_text+1)) .
  *  \param icy_text The input data in ICY encoding
  *  \return pointer to newly allocated buffer with UTF-8 data (You free() it!) *)
 function mpg123_icy2utf8(const icy_text: MarshaledAString): MarshaledAString;
- cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_icy2utf8' {$ENDIF};
+ cdecl; external link_libmpg123 name _PU + 'mpg123_icy2utf8';
 
 (* @} *)
 
@@ -1290,27 +1290,27 @@ type
  *  \return mpg123 handle
  *)
 function mpg123_parnew(mp: pMpg123_pars; const decoder: MarshaledAString; error: PInteger): PMpg123_handle;
-  cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_parnew' {$ENDIF};
+  cdecl; external link_libmpg123 name _PU + 'mpg123_parnew';
 
 (** Allocate memory for and return a pointer to a new mpg123_pars
  *  \param error error code return address
  *  \return new parameter handle
  *)
 function mpg123_new_pars_1(error: PInteger): PMpg123_pars;
-  cdecl; external link_libmpg123 name 'mpg123_new_pars' {$IFDEF MACOS} name _PU + 'mpg123_new_pars' {$ENDIF};
+  cdecl; external link_libmpg123 name _PU + 'mpg123_new_pars';
 
 (** Delete and free up memory used by a mpg123_pars data structure
  *  \param mp parameter handle
  *)
 procedure mpg123_new_pars(mp: pMpg123_pars);
-  cdecl; external link_libmpg123 name 'mpg123_new_pars' {$IFDEF MACOS} name _PU + 'mpg123_new_pars' {$ENDIF};
+  cdecl; external link_libmpg123 name _PU + 'mpg123_new_pars';
 (** Configure mpg123 parameters to accept no output format at all,
  *  use before specifying supported formats with mpg123_format
  *  \param mp parameter handle
  *  \return MPG123_OK on success
  *)
 function mpg123_fmt_none(mp: pMpg123_pars): Integer;
-  cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_fmt_none' {$ENDIF};
+  cdecl; external link_libmpg123 name _PU + 'mpg123_fmt_none';
 
 (** Configure mpg123 parameters to accept all formats
  *  (also any custom rate you may set) -- this is default.
@@ -1318,7 +1318,7 @@ function mpg123_fmt_none(mp: pMpg123_pars): Integer;
  *  \return MPG123_OK on success
  *)
 function mpg123_fmt_all(mp: pMpg123_pars): Integer;
-  cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_fmt_all' {$ENDIF};
+  cdecl; external link_libmpg123 name _PU + 'mpg123_fmt_all';
 
 (** Set the audio format support of a mpg123_pars in detail:
  * \param mp parameter handle
@@ -1330,7 +1330,7 @@ function mpg123_fmt_all(mp: pMpg123_pars): Integer;
  * \return MPG123_OK on success
 *)
 function mpg123_fmt(mp: pMpg123_pars; rate: Longint; channels: Integer; encodings: Integer): Integer;
-  cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_fmt' {$ENDIF};
+  cdecl; external link_libmpg123 name _PU + 'mpg123_fmt';
 
 (** Check to see if a specific format at a specific rate is supported
  *  by mpg123_pars.
@@ -1340,7 +1340,7 @@ function mpg123_fmt(mp: pMpg123_pars; rate: Longint; channels: Integer; encoding
  *  \return 0 for no support (that includes invalid parameters), MPG123_STEREO,
  *          MPG123_MONO or MPG123_STEREO|MPG123_MONO. *)
 function mpg123_fmt_support(mp: pMpg123_pars; rate: Longint; encodings: Integer): Integer;
-  cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_fmt_support' {$ENDIF};
+  cdecl; external link_libmpg123 name _PU + 'mpg123_fmt_support';
 
 (** Set a specific parameter, for a specific mpg123_pars, using a parameter
  *  type key chosen from the mpg123_parms enumeration, to the specified value.
@@ -1351,7 +1351,7 @@ function mpg123_fmt_support(mp: pMpg123_pars; rate: Longint; encodings: Integer)
  *  \return MPG123_OK on success
  *)
 function mpg123_par(mp: pMpg123_pars; _type: TMpg123_parms; value: Longint; fvalue: Double): Integer;
-  cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_par' {$ENDIF};
+  cdecl; external link_libmpg123 name _PU + 'mpg123_par';
 
 (** Get a specific parameter, for a specific mpg123_pars.
  *  See the mpg123_parms enumeration for a list of available parameters.
@@ -1362,7 +1362,7 @@ function mpg123_par(mp: pMpg123_pars; _type: TMpg123_parms; value: Longint; fval
  *  \return MPG123_OK on success
  *)
 function mpg123_getpar(mp: pMpg123_pars; _type: TMpg123_parms; value: PLongint; fvalue: PDouble): Integer;
-  cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_getpar' {$ENDIF};
+  cdecl; external link_libmpg123 name _PU + 'mpg123_getpar';
 
 (* @} *)
 
@@ -1383,7 +1383,7 @@ function mpg123_getpar(mp: pMpg123_pars; _type: TMpg123_parms; value: PLongint; 
   * \return MPG123_OK on success
   *)
 function mpg123_replace_buffer(mh: pMpg123_handle; data: PByte; size: Cardinal): Integer;
-  cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_replace_buffer' {$ENDIF};
+  cdecl; external link_libmpg123 name _PU + 'mpg123_replace_buffer';
 
 (** The max size of one frame's decoded output with current settings.
  *  Use that to determine an appropriate minimum buffer size for decoding one frame.
@@ -1391,7 +1391,7 @@ function mpg123_replace_buffer(mh: pMpg123_handle; data: PByte; size: Cardinal):
  *  \return maximum decoded data size in bytes
  *)
 function mpg123_outblock(mh: pMpg123_handle): Cardinal;
-  cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_outblock' {$ENDIF};
+  cdecl; external link_libmpg123 name _PU + 'mpg123_outblock';
 
 (** Replace low-level stream access functions; read and lseek as known in POSIX.
  *  You can use this to make any fancy file opening/closing yourself,
@@ -1411,7 +1411,7 @@ type
   r_lseek_cb = function(fildes: Integer; offset: LongInt; whence: Integer): LongInt; cdecl;
 
 function mpg123_replace_reader( mh: pMpg123_handle; r_read: r_read_cb; r_lseek: r_lseek_cb): Integer;
-  cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_replace_reader' {$ENDIF};
+  cdecl; external link_libmpg123 name _PU + 'mpg123_replace_reader';
 
 (** Replace I/O functions with your own ones operating on some kind of
  *  handle instead of integer descriptors.
@@ -1431,7 +1431,7 @@ function mpg123_replace_reader( mh: pMpg123_handle; r_read: r_read_cb; r_lseek: 
 //,	ssize_t (*r_read) (void *, void *, size_t)
 //,	off_t (*r_lseek)(void *, off_t, int)
 //,	void (*cleanup)(void*) ): Integer;
-//  cdecl; external link_libmpg123 {$IFDEF MACOS} name _PU + 'mpg123_replace_reader_handle' {$ENDIF};
+//  cdecl; external link_libmpg123 name _PU + 'mpg123_replace_reader_handle';
 
 (* @} *)
 
